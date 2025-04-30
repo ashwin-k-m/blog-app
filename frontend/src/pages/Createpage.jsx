@@ -1,12 +1,12 @@
 import 'react-quill/dist/quill.snow.css';
-import {useState} from "react";
-import {Navigate} from "react-router-dom";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import Editor from "../components/Editor";
 
 export default function CreatePost() {
-  const [title,setTitle] = useState('');
-  const [summary,setSummary] = useState('');
-  const [content,setContent] = useState('');
+  const [title, setTitle] = useState('');
+  const [summary, setSummary] = useState('');
+  const [content, setContent] = useState('');
   const [files, setFiles] = useState(null);
   const [redirect, setRedirect] = useState(false);
   async function createNewPost(ev) {
@@ -32,17 +32,17 @@ export default function CreatePost() {
   return (
     <form onSubmit={createNewPost}>
       <input type="title"
-             placeholder={'Title'}
-             value={title}
-             onChange={ev => setTitle(ev.target.value)} />
+        placeholder={'Title'}
+        value={title}
+        onChange={ev => setTitle(ev.target.value)} />
       <input type="summary"
-             placeholder={'Summary'}
-             value={summary}
-             onChange={ev => setSummary(ev.target.value)} />
+        placeholder={'Summary'}
+        value={summary}
+        onChange={ev => setSummary(ev.target.value)} />
       <input type="file"
-             onChange={ev => setFiles(ev.target.files)} />
+        onChange={ev => setFiles(ev.target.files)} />
       <Editor value={content} onChange={setContent} />
-      <button style={{marginTop:'5px'}}>Create post</button>
+      <button style={{ marginTop: '5px' }}>Create post</button>
     </form>
   );
 }

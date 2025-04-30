@@ -1,13 +1,14 @@
-import {useContext, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
-import {formatISO9075} from "date-fns";
-import {UserContext} from "../components/Usercontext";
-import {Link} from 'react-router-dom';
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { formatISO9075 } from "date-fns";
+import { UserContext } from "../components/Usercontext";
+import { Link } from 'react-router-dom';
 
 export default function PostPage() {
-  const [postInfo,setPostInfo] = useState(null);
-  const {userInfo} = useContext(UserContext);
-  const {id} = useParams();
+  const [postInfo, setPostInfo] = useState(null);
+  const { userInfo } = useContext(UserContext);
+  const { id } = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     fetch(`http://localhost:4000/post/${id}`)
       .then(response => {
@@ -16,6 +17,23 @@ export default function PostPage() {
         });
       });
   }, []);
+
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+
+    const response = await fetch(`http://localhost:4000/post/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+
+    if (response.ok) {
+      alert("Post deleted successfully.");
+      navigate('/'); // Redirect to homepage
+    } else {
+      alert("Failed to delete post.");
+    }
+  };
 
   if (!postInfo) return '';
 
@@ -32,12 +50,16 @@ export default function PostPage() {
             </svg>
             Edit this post
           </Link>
+          <button onClick={handleDelete} style={{ marginTop: '10px', background: 'red', color: 'white' }}>
+            Delete Post
+          </button>
         </div>
+
       )}
-      <div className="image" style={{maxWidth:"100rem",maxHeight:"100rem"}}>
-        <img src={`http://localhost:4000/${postInfo.cover}`} alt=""/>
+      <div className="image" style={{ maxWidth: "100rem", maxHeight: "100rem" }}>
+        <img src={`http://localhost:4000/${postInfo.cover}`} alt="" />
       </div>
-      <div className="content" dangerouslySetInnerHTML={{__html:postInfo.content}} />
+      <div className="content" dangerouslySetInnerHTML={{ __html: postInfo.content }} />
     </div>
   );
 }

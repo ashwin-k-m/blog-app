@@ -1,17 +1,17 @@
-import {useEffect, useState} from "react";
-import {Navigate, useParams} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate, useParams } from "react-router-dom";
 import Editor from "../components/Editor";
 
 export default function EditPost() {
-  const {id} = useParams();
-  const [title,setTitle] = useState('');
-  const [summary,setSummary] = useState('');
-  const [content,setContent] = useState('');
+  const { id } = useParams();
+  const [title, setTitle] = useState('');
+  const [summary, setSummary] = useState('');
+  const [content, setContent] = useState('');
   const [files, setFiles] = useState('');
-  const [redirect,setRedirect] = useState(false);
+  const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:4000/post/'+id)
+    fetch('http://localhost:4000/post/' + id)
       .then(response => {
         response.json().then(postInfo => {
           setTitle(postInfo.title);
@@ -42,23 +42,23 @@ export default function EditPost() {
   }
 
   if (redirect) {
-    return <Navigate to={'/post/'+id} />
+    return <Navigate to={'/post/' + id} />
   }
 
   return (
     <form onSubmit={updatePost}>
       <input type="title"
-             placeholder={'Title'}
-             value={title}
-             onChange={ev => setTitle(ev.target.value)} />
+        placeholder={'Title'}
+        value={title}
+        onChange={ev => setTitle(ev.target.value)} />
       <input type="summary"
-             placeholder={'Summary'}
-             value={summary}
-             onChange={ev => setSummary(ev.target.value)} />
+        placeholder={'Summary'}
+        value={summary}
+        onChange={ev => setSummary(ev.target.value)} />
       <input type="file"
-             onChange={ev => setFiles(ev.target.files)} />
+        onChange={ev => setFiles(ev.target.files)} />
       <Editor onChange={setContent} value={content} />
-      <button style={{marginTop:'5px'}}>Update post</button>
+      <button style={{ marginTop: '5px' }}>Update post</button>
     </form>
   );
 }

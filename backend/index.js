@@ -6,6 +6,7 @@ const Post = require('./models/Post');
 const bcrypt = require('bcryptjs');
 const app = express();
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const paths = 'backend/';
@@ -128,6 +129,32 @@ app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
 
     await postDoc.updateOne(updatedData);
     res.json({ ...postDoc.toObject(), ...updatedData });
+  });
+});
+
+app.delete('/post/:id', async (req, res) => {
+  const { token } = req.cookies;
+  const { id } = req.params;
+
+  jwt.verify(token, secret, {}, async (err, info) => {
+    if (err) return res.status(401).json('Unauthorized');
+
+    const postDoc = await Post.findById(id);
+    if (!postDoc) return res.status(404).json('Post not found');
+
+    const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
+    if (!isAuthor) return res.status(403).json('You are not the author');
+
+    // Optional: delete image file
+    if (postDoc.cover) {
+      const imagePath = pathModule.resolve(postDoc.cover);
+      fs.unlink(imagePath, (err) => {
+        if (err) console.error('Failed to delete image:', err);
+      });
+    }
+
+    await Post.findByIdAndDelete(id);
+    res.json({ success: true, message: 'Post deleted successfully' });
   });
 });
 

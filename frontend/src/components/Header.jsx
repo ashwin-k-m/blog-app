@@ -1,9 +1,9 @@
-import {Link} from "react-router-dom";
-import {useContext, useEffect} from "react";
-import {UserContext} from "./Usercontext";
+import { Link } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { UserContext } from "./Usercontext";
 
 export default function Header() {
-  const {setUserInfo,userInfo} = useContext(UserContext);
+  const { setUserInfo, userInfo } = useContext(UserContext);
   useEffect(() => {
     fetch('http://localhost:4000/profile', {
       credentials: 'include',
@@ -30,8 +30,8 @@ export default function Header() {
       <nav>
         {username && (
           <>
-            <Link to="/create">Create new post</Link>
-            <a onClick={logout}>Logout ({username})</a>
+            <Link to="/create">Add post</Link>
+            <a onClick={logout}>Logout ({username?.split('@')[0]})</a>
           </>
         )}
         {!username && (

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { formatISO9075 } from "date-fns";
 import { UserContext } from "../components/Usercontext";
 import { Link } from 'react-router-dom';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function PostPage() {
   const [postInfo, setPostInfo] = useState(null);
@@ -10,7 +11,7 @@ export default function PostPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
-    fetch(`http://localhost:4000/post/${id}`)
+    fetch(`${apiUrl}/post/${id}`)
       .then(response => {
         response.json().then(postInfo => {
           setPostInfo(postInfo);
@@ -22,7 +23,7 @@ export default function PostPage() {
     const confirmDelete = window.confirm("Are you sure you want to delete this post?");
     if (!confirmDelete) return;
 
-    const response = await fetch(`http://localhost:4000/post/${id}`, {
+    const response = await fetch(`${apiUrl}/post/${id}`, {
       method: 'DELETE',
       credentials: 'include',
     });
@@ -57,7 +58,7 @@ export default function PostPage() {
 
       )}
       <div className="image" style={{ maxWidth: "100rem", maxHeight: "100rem" }}>
-        <img src={`http://localhost:4000/${postInfo.cover}`} alt="" />
+        <img src={`${apiUrl}/${postInfo.cover}`} alt="" />
       </div>
       <div className="content" dangerouslySetInnerHTML={{ __html: postInfo.content }} />
     </div>

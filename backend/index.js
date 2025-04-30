@@ -1,3 +1,4 @@
+require('dotenv').config({ path: './backend/.env' });
 const express = require('express');
 const cors = require('cors');
 const mongoose = require("mongoose");
@@ -6,7 +7,6 @@ const Post = require('./models/Post');
 const bcrypt = require('bcryptjs');
 const app = express();
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const paths = 'backend/';
@@ -15,14 +15,17 @@ const fs = require('fs');
 const pathModule = require('path');
 
 const salt = bcrypt.genSaltSync(10);
-const secret = 'asdfe45we45w345wegw345werjktjwertkj';
+const secret = process.env.JWT_SECRET;
 
-app.use(cors({ credentials: true, origin: 'http://localhost:5173' }));
+console.log('Loaded MONGO_URL:', process.env.MONGO_URL);
+
+
+app.use(cors({ credentials: true, origin: process.env.FRONTEND_URL }));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(pathModule.join(__dirname, 'uploads')));
 
-mongoose.connect('mongodb://localhost:27017/blog');
+mongoose.connect(process.env.MONGO_URL);
 
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
@@ -173,5 +176,5 @@ app.get('/post/:id', async (req, res) => {
   res.json(postDoc);
 })
 
-app.listen(4000);
+app.listen(process.env.PORT);
 //

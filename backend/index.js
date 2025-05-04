@@ -17,7 +17,7 @@ const pathModule = require('path');
 const salt = bcrypt.genSaltSync(10);
 const secret = process.env.JWT_SECRET;
 
-console.log('Loaded MONGO_URL:', process.env.MONGO_URL);
+console.log('Loaded MONGO_DB');
 
 
 app.use(cors({ credentials: true, origin: process.env.FRONTEND_URL }));

@@ -15,7 +15,8 @@
   },
   "scripts": {
     "start": "node backend/index.js",
-    "dev": "nodemon backend/index.js"
+    "dev": "nodemon backend/index.js",
+    "build": "npm install"
   },
   "main": "server.js",
   "name": "blog-app",
